@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>List of board games</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Bgg</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bgames.each do |bgame| %>
+      <tr>
+        <td><%= bgame.name %></td>
+        <td><%= bgame.bgg_id %></td>
+        <td><%= link_to 'BoardGameGeek Link',"http://www.boardgamegeek.com/boardgame/" + bgame.bgg_id.to_s %></td>
+        <td><%= link_to 'Show', bgame %></td>
+        <td><%= link_to 'Edit', edit_bgame_path(bgame) %></td>
+        <td><%= link_to 'Destroy', bgame, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Add new game', new_bgame_path %>
