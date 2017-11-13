@@ -8,12 +8,12 @@ class BgamesController < ApplicationController
   end
 
   def filter
-	if params[:str_filter].to_s.empty?
-		@bgames = Bgame.all.sort_by{|n| n.name}
-	else
-		@bgames = Bgame.where("name LIKE '%#{params[:str_filter]}%'")
-	end
-	render 'index'
+  	if params[:str_filter].to_s.empty?
+  		@bgames = Bgame.all.sort_by{|n| n.name}
+  	else
+  		@bgames = Bgame.where("name LIKE '%#{params[:str_filter]}%'")
+  	end
+  	render 'index'
   end
 
   # GET /bgames/1
