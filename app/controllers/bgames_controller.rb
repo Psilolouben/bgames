@@ -4,16 +4,16 @@ class BgamesController < ApplicationController
   # GET /bgames
   # GET /bgames.json
   def index
-    @bgames = Bgame.all.sort_by{|n| n.name}
+    @bgames = Bgame.all.sort_by { |n| n.name }
   end
 
   def filter
-  	if params[:str_filter].to_s.empty?
-  		@bgames = Bgame.all.sort_by{|n| n.name}
-  	else
-  		@bgames = Bgame.where("name LIKE '%#{params[:str_filter]}%'")
-  	end
-  	render 'index'
+    if params[:str_filter].to_s.empty?
+      @bgames = Bgame.all.sort_by { |n| n.name }
+    else
+      @bgames = Bgame.where("name LIKE '%#{params[:str_filter]}%'")
+    end
+    render 'index'
   end
 
   # GET /bgames/1
@@ -71,13 +71,14 @@ class BgamesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_bgame
-      @bgame = Bgame.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def bgame_params
-      params.require(:bgame).permit(:name, :bgg_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_bgame
+    @bgame = Bgame.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def bgame_params
+    params.require(:bgame).permit(:name, :bgg_id)
+  end
 end
