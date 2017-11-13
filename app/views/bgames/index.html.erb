@@ -1,8 +1,16 @@
 <p id="notice"><%= notice %></p>
 
+
 <h1>List of board games</h1>
 
-<table>
+<%= form_tag({controller: "bgames", action: "filter"}, method: "post") do %>
+  Filter
+  <%= text_field_tag(:str_filter) %>
+  <%= submit_tag("Search") %>
+<% end %>
+
+
+<table width="100%" border="1px">
   <thead>
     <tr>
       <th>Name</th>
@@ -17,7 +25,7 @@
         <td><%= bgame.name %></td>
         <td><%= bgame.bgg_id %></td>
         <td><%= link_to 'BoardGameGeek Link',"http://www.boardgamegeek.com/boardgame/" + bgame.bgg_id.to_s %></td>
-        <td><%= link_to 'Show', bgame %></td>
+        <!--<td><%= link_to 'Show', bgame %></td>-->
         <td><%= link_to 'Edit', edit_bgame_path(bgame) %></td>
         <td><%= link_to 'Destroy', bgame, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

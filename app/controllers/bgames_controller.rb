@@ -4,7 +4,16 @@ class BgamesController < ApplicationController
   # GET /bgames
   # GET /bgames.json
   def index
-    @bgames = Bgame.all
+    @bgames = Bgame.all.sort_by{|n| n.name}
+  end
+
+  def filter
+	if params[:str_filter].to_s.empty?
+		@bgames = Bgame.all.sort_by{|n| n.name}
+	else
+		@bgames = Bgame.where("name LIKE '%#{params[:str_filter]}%'")
+	end
+	render 'index'
   end
 
   # GET /bgames/1
