@@ -8,27 +8,28 @@
   <%= text_field_tag(:str_filter) %>
   <%= submit_tag("Search") %>
 <% end %>
-
+<%= button_to 'Crawl', {controller: "bgames", action: "crawl"}, method: :get %>
 
 <table width="100%" border="1px">
   <thead>
     <tr>
       <th>Name</th>
       <th>Rating</th>
-      <th colspan="3"></th>
+      <th>Number Of Voters</th>
     </tr>
   </thead>
 
   <tbody>
-    <% @bgames.each do |bgame| %>
+    <% @ret_bgames.each do |bgame| %>
       <tr>
         <td><%= bgame.name %></td>
         <td><%= bgame.rating %></td>
+        <td><%= bgame.voters %></td>
         <!--<td><%= price_of_item %></td>-->
         <!--<td><%= link_to 'BoardGameGeek Link',"http://www.boardgamegeek.com/boardgame/" + bgame.bgg_id.to_s %></td>-->
         <!--<td><%= link_to 'Show', bgame %></td>-->
-        <td><%= link_to 'Edit', edit_bgame_path(bgame) %></td>
-        <td><%= link_to 'Destroy', bgame, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <!--<td><%= link_to 'Edit', edit_bgame_path(bgame) %></td>
+        <td><%= link_to 'Destroy', bgame, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
       </tr>
     <% end %>
   </tbody>

@@ -27,6 +27,7 @@ gem 'awesome_print'
 # HTTP Requests (Curl)
 gem "curb", '0.8.6', :require => nil # ubuntu:libcurl4-openssl-dev
 gem "httparty"
+gem 'responders', '~> 2.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -52,4 +53,3 @@ group :development do
   gem 'pry-byebug', '~> 3.5'
   gem 'pry-doc', '~> 0.11.1'
 end
-

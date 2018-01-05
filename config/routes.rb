@@ -56,6 +56,8 @@ Rails.application.routes.draw do
   #   end
   root 'bgames#index'
 
-  match '/bgames',      to: 'bgames#index',        via: 'get'
   match '/',      to: 'bgames#filter',        via: 'post'
+  match '/crawl',      to: 'bgames#crawl',        via: 'get'
+  match '/index',      to: 'bgames#index',        via: 'get'
+
 end
