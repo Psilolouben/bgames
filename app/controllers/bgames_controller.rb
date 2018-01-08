@@ -14,17 +14,17 @@
       @ret_bgames = []
       @db_games = Bgame.all
 
-      #@iteration = 1
-      @iteration = 0
+      @iteration = 1
+      #@iteration = 0
       @current_search_bgames={}
-      while @iteration <= 5165
-      #while @iteration <= 8
+      #while @iteration < 5130
+      while @iteration <= 9
         @bgames = []
-        #iterationStr = @iteration == 1 ? "1-150" : ((@iteration-1)*150).to_s + "-" + (@iteration*150).to_s
-        iterationStr = @iteration.to_s
-        puts "Now iterating: " + iterationStr
-        #url = "https://www.thegamerules.com/el/funko-pop/funky-games/world-of-warcraft/search/by,%60p%60.product_availability/dirAsc/results," + iterationStr + "?language=el-GR&filter_product="
-        url = "https://www.thegamerules.com/el/arxiki?start=#{@iteration}"
+        iterationStr = @iteration == 1 ? "1-150" : ((@iteration-1)*150).to_s + "-" + (@iteration*150).to_s
+        #iterationStr = @iteration.to_s
+        puts "Now iterating: " + iterationStr + " at #{Time.now.to_s}"
+        url = "https://www.thegamerules.com/el/funko-pop/funky-games/world-of-warcraft/search/by,%60p%60.product_availability/dirAsc/results," + iterationStr + "?language=el-GR&filter_product="
+        #url = "https://www.thegamerules.com/el/arxiki?start=#{@iteration}"
         url_parsed = URI.parse(url)
         response = Net::HTTP.get_response(url_parsed)
         splitresponse = response.body.split('catProductTitle')
@@ -73,8 +73,8 @@
           end
         end
         puts "Iterated: " + iterationStr
-        #@iteration += 1
-        @iteration += 30
+        @iteration += 1
+        #@iteration += 30
       end
       query = @current_search_bgames.keys.join(',')
       if query != ""
