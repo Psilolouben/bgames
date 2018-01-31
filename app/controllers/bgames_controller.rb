@@ -18,7 +18,7 @@
       #@iteration = 0
       @current_search_bgames={}
       #while @iteration < 5130
-      while @iteration <= 8
+      while @iteration <= 10
         @bgames = []
         iterationStr = @iteration == 1 ? "1-150" : ((@iteration-1)*150).to_s + "-" + (@iteration*150).to_s
         #iterationStr = @iteration.to_s
