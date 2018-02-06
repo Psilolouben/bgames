@@ -3,7 +3,7 @@ lock "~> 3.10.1"
 
 server '174.138.10.83', roles: [:web, :app, :db], primary:true
 
-set :application, "Bgame Crawler"
+set :application, "Bgame_Crawler"
 set :repo_url, "git@github.com:Psilolouben/bgames.git"
 set :user, 'deploy'
 set :puma_threads, [4,16]
