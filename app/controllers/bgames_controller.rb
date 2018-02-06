@@ -66,7 +66,7 @@
             bg.name = @existing.name
             bg.voters = @existing.voters
             bg.rating = @existing.rating
-            bg.score = WilsonScore.rating_lower_bound(@existing.rating.to_f, @existing.voters, 1..10)
+            bg.score = (bg.rating != 0 && bg.voters != 0) ? WilsonScore.rating_lower_bound(@existing.rating.to_f, @existing.voters, 1..10) : 0
             @ret_bgames << bg unless @ret_bgames.select{|b| b.bgg_id == bg.bgg_id}.count > 0
           end
           rescue StandardError => exc
@@ -78,6 +78,7 @@
         #@iteration += 30
       end
       query = @current_search_bgames.keys.join(',')
+      binding.pry
       if query != ""
         response = HTTParty.get('https://www.boardgamegeek.com/xmlapi2/thing?id=' + query.to_s + "&stats=1").body
         hsh = Hash.from_xml(response.gsub("\n", ""))
@@ -90,7 +91,7 @@
       #  #bg.rating = hsh["boardgames"]["boardgame"]["statistics"]["ratings"]["average"]["value"].to_f
             bgame.bgg_id = bg["id"].to_i
             bgame.name = @current_search_bgames[bgame.bgg_id]
-            bgame.score = WilsonScore.rating_lower_bound(bgame.rating.to_f, bgame.voters, 1..10)
+            bgame.score = (bgame.rating != 0 && bgame.voters != 0) ? WilsonScore.rating_lower_bound(bgame.rating.to_f, bgame.voters, 1..10) : 0
             bgame.save
             @ret_bgames << bgame
           end
@@ -102,7 +103,7 @@
     #  #bg.rating = hsh["boardgames"]["boardgame"]["statistics"]["ratings"]["average"]["value"].to_f
           bgame.bgg_id = hsh["items"]["item"]["id"].to_i
           bgame.name = @current_search_bgames[bgame.bgg_id]
-          bgame.score = WilsonScore.rating_lower_bound(bgame.rating.to_f, bgame.voters, 1..10)
+          bgame.score =(bgame.rating != 0 && bgame.voters != 0) ? WilsonScore.rating_lower_bound(bgame.rating.to_f, bgame.voters, 1..10) : 0
           bgame.save
           @ret_bgames << bgame
         end
