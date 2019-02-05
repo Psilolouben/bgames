@@ -14,17 +14,17 @@
       @ret_bgames = []
       @db_games = Bgame.all
 
-      @iteration = 1
+      @iteration = 0
       #@iteration = 0
       @current_search_bgames={}
       #while @iteration < 5130
       while @iteration <= 10
         @bgames = []
-        iterationStr = @iteration == 1 ? "1-150" : ((@iteration-1)*150).to_s + "-" + (@iteration*150).to_s
-        #iterationStr = @iteration.to_s
+        #iterationStr = @iteration == 1 ? "1-150" : ((@iteration-1)*150).to_s + "-" + (@iteration*150).to_s
+        iterationStr = @iteration.to_s
         puts "Now iterating: " + iterationStr + " at #{Time.now.to_s}"
-        url = "https://www.thegamerules.com/el/funko-pop/funky-games/world-of-warcraft/search/by,%60p%60.product_availability/dirAsc/results," + iterationStr + "?language=el-GR&filter_product="
-        #url = "https://www.thegamerules.com/el/arxiki?start=#{@iteration}"
+        #url = "https://www.thegamerules.com/el/arxiki/by,%60p%60.product_availability/dirAsc/results," + iterationStr + "?language=el-GR&categorylayout=default"
+        url = "https://www.thegamerules.com/index.php?option=com_virtuemart&view=category&categorylayout=default&Itemid=742&lang=el&language=el-GR&orderby=`p`.product_availability&dir=ASC&limitstart=" + (@iteration * 150).to_s
         url_parsed = URI.parse(url)
         response = Net::HTTP.get_response(url_parsed)
         splitresponse = response.body.split('catProductTitle')
@@ -38,7 +38,9 @@
             .gsub("(Exp.)", "").gsub(/\(.*\)/, "")
             .gsub("(","").gsub(")","").strip.squish
             bgm.id = 0
-            @bgames << bgm unless bgm.name == "\n"
+            #binding.pry
+            unfound =  UnfoundBgame.where(bgname: bgm.name).any?
+            @bgames << bgm unless bgm.name == "\n" || unfound
           rescue
             next
           end
@@ -70,6 +72,11 @@
             @ret_bgames << bg unless @ret_bgames.select{|b| b.bgg_id == bg.bgg_id}.count > 0
           end
           rescue StandardError => exc
+            if UnfoundBgame.exists?(bgname: "")
+              ubg = UnfoundBgame.new
+              ubg.bgname = bg.name
+              ubg.save
+            end
             next
           end
         end
@@ -77,8 +84,8 @@
         @iteration += 1
         #@iteration += 30
       end
+
       query = @current_search_bgames.keys.join(',')
-      binding.pry
       if query != ""
         response = HTTParty.get('https://www.boardgamegeek.com/xmlapi2/thing?id=' + query.to_s + "&stats=1").body
         hsh = Hash.from_xml(response.gsub("\n", ""))
