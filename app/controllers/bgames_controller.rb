@@ -14,31 +14,27 @@
       @ret_bgames = []
       @db_games = Bgame.all
 
-      @iteration = 0
+      @iteration = 1
       #@iteration = 0
       @current_search_bgames={}
       #while @iteration < 5130
-      while @iteration <= 10
+      while @iteration <= 16
         @bgames = []
-        #iterationStr = @iteration == 1 ? "1-150" : ((@iteration-1)*150).to_s + "-" + (@iteration*150).to_s
-        iterationStr = @iteration.to_s
-        puts "Now iterating: " + iterationStr + " at #{Time.now.to_s}"
-        #url = "https://www.thegamerules.com/el/arxiki/by,%60p%60.product_availability/dirAsc/results," + iterationStr + "?language=el-GR&categorylayout=default"
-        url = "https://www.thegamerules.com/index.php?option=com_virtuemart&view=category&categorylayout=default&Itemid=742&lang=el&language=el-GR&orderby=`p`.product_availability&dir=ASC&limitstart=" + (@iteration * 150).to_s
+
+        puts "Now iterating page: " + @iteration.to_s + " at #{Time.now.to_s}"
+
+        url = "https://www.thegamerules.com/epitrapezia-paixnidia?limit=100&fq=1&page=#{@iteration}"
         url_parsed = URI.parse(url)
         response = Net::HTTP.get_response(url_parsed)
-        splitresponse = response.body.split('catProductTitle')
-        splitresponse[0..150].each do |item|
-          i = item.split('>')[2].split('<')[0]
-          next if (i.include? 'Sleeves') || (i.include? 'Dice Set') || (i.include? 'Organizer') || (i.include? 'D6') ||
-          (i.include? 'Tokens') || (i.include? '&')
+
+        response.body.split('<div class="name">').each do |i|
           bgm = Bgame.new
           begin
-            bgm.name = i.encode("UTF-8").gsub("(Exp)", "")
-            .gsub("(Exp.)", "").gsub(/\(.*\)/, "")
-            .gsub("(","").gsub(")","").strip.squish
+            bgm.name = i.split('</a></div><div')[0].split('>')[1].encode("UTF-8").gsub("(Exp)", "")
+            .gsub("(Exp.)", "").gsub(/\(.*\)/, "").gsub("&amp;", "")
+            .gsub("(","").gsub(")","").strip.squish.encode('utf-8')
             bgm.id = 0
-            #binding.pry
+
             unfound =  UnfoundBgame.where(bgname: bgm.name).any?
             @bgames << bgm unless bgm.name == "\n" || unfound
           rescue
@@ -52,15 +48,11 @@
           if @existing.nil?
             response = HTTParty.get('https://www.boardgamegeek.com/xmlapi2/search?query=' + CGI.escape(bg.name) + "&exact=1&type=boardgame,boardgameexpansion").body
             sleep(1)
-            #response = HTTParty.get('https://www.boardgamegeek.com/xmlapi/search?search=' + bg.name, timeout: 20).body
             hsh = Hash.from_xml(response.gsub("\n", ""))
             if hsh["items"]["item"].is_a? Hash
-            #if hsh["boardgames"]["boardgames"].is_a? Hash
               bg.bgg_id = hsh["items"]["item"]["id"].to_i
-              #bg.bgg_id = hsh["boardgames"]["boardgame"]["objectid"].to_i
             else
               bg.bgg_id = hsh["items"]["item"].select{|s| s["name"]["type"]=="primary"}.first["id"].to_i
-            #bg.bgg_id = hsh["boardgames"]["boardgame"].select{|s| s["name"]["type"]=="primary"}.first["objectid"].to_i
             end
             @current_search_bgames[bg.bgg_id] = bg.name
           else
@@ -80,9 +72,8 @@
             next
           end
         end
-        puts "Iterated: " + iterationStr
+        puts "Iterated Page: " + @iteration.to_s
         @iteration += 1
-        #@iteration += 30
       end
 
       query = @current_search_bgames.keys.join(',')
@@ -94,8 +85,6 @@
             bgame = Bgame.new()
             bgame.rating = bg["statistics"]["ratings"]["average"]["value"].to_f
             bgame.voters = bg["statistics"]["ratings"]["usersrated"]["value"].to_i
-      #  #bg.voters = hsh["boardgames"]["boardgame"]["statistics"]["ratings"]["usersrated"]["value"].to_i
-      #  #bg.rating = hsh["boardgames"]["boardgame"]["statistics"]["ratings"]["average"]["value"].to_f
             bgame.bgg_id = bg["id"].to_i
             bgame.name = @current_search_bgames[bgame.bgg_id]
             bgame.score = (bgame.rating != 0 && bgame.voters != 0) ? WilsonScore.rating_lower_bound(bgame.rating.to_f, bgame.voters, 1..10) : 0
@@ -106,8 +95,6 @@
           bgame = Bgame.new()
           bgame.rating = hsh["items"]["item"]["statistics"]["ratings"]["average"]["value"].to_f
           bgame.voters = hsh["items"]["item"]["statistics"]["ratings"]["usersrated"]["value"].to_i
-    #  #bg.voters = hsh["boardgames"]["boardgame"]["statistics"]["ratings"]["usersrated"]["value"].to_i
-    #  #bg.rating = hsh["boardgames"]["boardgame"]["statistics"]["ratings"]["average"]["value"].to_f
           bgame.bgg_id = hsh["items"]["item"]["id"].to_i
           bgame.name = @current_search_bgames[bgame.bgg_id]
           bgame.score =(bgame.rating != 0 && bgame.voters != 0) ? WilsonScore.rating_lower_bound(bgame.rating.to_f, bgame.voters, 1..10) : 0
@@ -122,7 +109,7 @@
         arr << ob
       end
       @ret_bgames = @ret_bgames.find_all{|x| !x.rating.nil?}.sort_by { |n| n.score }.reverse
-      #@bgames = Bgame.all.sort_by { |n| n.name }
+
       render 'index'
     end
 
