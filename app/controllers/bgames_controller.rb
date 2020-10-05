@@ -112,6 +112,21 @@
     end
   end
 
+  def played_stats(year = Date.today.year)
+    @ret_bgames = []
+    @db_games = Bgame.all
+    pages =10
+
+    this_years_plays_response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/plays?username=psilolouben&mindate=#{year}-01-01&maxdate=#{year}-12-31")
+    this_years_plays = this_years_plays_response.with_indifferent_access[:plays][:play].sum do |entry|
+      id = entry[:item][:objectid]
+      response = HTTParty.get('https://www.boardgamegeek.com/xmlapi2/thing?id=' + id.to_s + "&stats=1").body
+      hsh = Hash.from_xml(response.gsub("\n", "")).with_indifferent_access
+      weight = hsh[:items][:item][:statistics][:ratings][:averageweight][:value].to_f
+      entry[:quantity].to_i * weight
+    end
+  end
+
   def crawl_games
     @ret_bgames = []
       @db_games = Bgame.all
