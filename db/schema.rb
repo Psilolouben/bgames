@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226100143) do
+ActiveRecord::Schema.define(version: 20210214175724) do
 
   create_table "bgames", force: :cascade do |t|
     t.string   "name"
     t.integer  "bgg_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "rating"
     t.integer  "voters"
     t.float    "score"
+    t.boolean  "in_stock"
   end
 
   create_table "unfound_bgames", force: :cascade do |t|
