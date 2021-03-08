@@ -4,6 +4,6 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <%= Bgame.todays.order(:score).pluck(:name) %>
+    <%= Bgame.get_diff.map(&:name) %>
   </body>
 </html>
