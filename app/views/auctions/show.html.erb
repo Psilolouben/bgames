@@ -1,0 +1,10 @@
+<form method="post">
+  <div class="field">
+    <%= label_tag :geeklist_id, 'Geeklist ID' %><br>
+    <%= text_field :geeklist_id, @geeklist_id %>
+
+    <input type="submit" value="Go!" class="button"/>
+
+    <%= "Total auction earnings: #{@money} euros" %>
+  </div>
+</form>

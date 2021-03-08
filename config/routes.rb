@@ -59,5 +59,6 @@ Rails.application.routes.draw do
   match '/',      to: 'bgames#filter',        via: 'post'
   match '/crawl',      to: 'bgames#crawl',        via: 'get'
   match '/index',      to: 'bgames#index',        via: 'get'
-
+  match '/auctions', to: 'auctions#show', via: 'get'
+  match '/auctions', to: 'auctions#calculate', via: 'post'
 end
