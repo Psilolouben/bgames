@@ -98,4 +98,40 @@ class Bgame < ActiveRecord::Base
       score: (rating != 0 && voters != 0) ? WilsonScore.rating_lower_bound(rating, voters, 1..10) : 0
     }
   end
+
+  def self.calculate_auction_money(geeklist_id)
+    response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
+    hsh = Hash.from_xml(response)
+    items = hsh['geeklist']['item']
+
+    money = 0
+    items.each do |itm|
+      next if itm['comment'].nil?
+      money += itm['comment'].is_a?(Array) ? itm['comment'].map{|x| x.strip.to_i}.max : itm['comment'].to_i
+    end;0
+
+    money
+  end
+
+  def self.give_presents(geeklist_id, n)
+    response = HTTParty.get('https://www.boardgamegeek.com/xmlapi/geeklist/283290?comments=1').body
+    hsh = Hash.from_xml(response)
+    items = hsh['geeklist']['item']
+
+    pot = []
+    items.each do |itm|
+      next if itm['comment'].nil?
+
+      itm['comment'].is_a?(Array) ?
+        itm['comment'].to_a.each do |comm|
+          pot << "User that bids #{comm.gsub("\n","")} for item: #{itm['objectname']}" unless comm.strip.to_i.zero?
+        end : "User that bids #{itm['comment'].gsub("\n","")} for item: #{itm['objectname']}"
+    end;0
+
+    n.times do
+      winner = pot.sample
+      pp winner
+      pot -= [winner]
+    end
+  end
 end
