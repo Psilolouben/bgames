@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.7.1'
 # Use sqlite3 as the database for Active Record
 gem 'puma', '3.9.1'
-gem 'sqlite3'
 #gem 'turbolinks'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -58,5 +57,6 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-puma', require: false
+  gem 'sqlite3'
 end
 
