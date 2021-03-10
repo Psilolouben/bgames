@@ -116,6 +116,7 @@ class Bgame < ActiveRecord::Base
   end
 
   def self.give_presents(geeklist_id, n)
+    winners = []
     response = HTTParty.get('https://www.boardgamegeek.com/xmlapi/geeklist/283290?comments=1').body
     hsh = Hash.from_xml(response)
     items = hsh['geeklist']['item']
@@ -132,8 +133,10 @@ class Bgame < ActiveRecord::Base
 
     n.times do
       winner = pot.sample
-      pp winner
+      winners << winner
       pot -= [winner]
     end
+
+    winners
   end
 end

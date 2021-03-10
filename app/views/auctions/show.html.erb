@@ -1,10 +1,24 @@
 <form method="post">
-  <div class="field">
+  <div>
     <%= label_tag :geeklist_id, 'Geeklist ID' %><br>
-    <%= text_field :geeklist_id, @geeklist_id %>
-
+    <%= text_field :geeklist_id, '' %>
+  </div>
+  <div>
+    <%= label_tag :gifts, 'Gifts #' %><br>
+    <%= text_field :gifts, '' %>
+  </div>
+  <br/>
+  <div>
     <input type="submit" value="Go!" class="button"/>
 
-    <%= "Total auction earnings: #{@money} euros" %>
+    <p>
+      <%= "Total auction earnings: #{@money} euros" %>
+    </p>
+    <p>
+      <%= "Gift winners: " %>
+    </p>
+    <% @winners.each do |w| %>
+      <p> <%= w %> </p>
+    <% end %>
   </div>
 </form>
