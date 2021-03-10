@@ -17,7 +17,7 @@
     <p>
       <%= "Gift winners: " %>
     </p>
-    <% @winners.each do |w| %>
+    <% @winners&.each do |w| %>
       <p> <%= w %> </p>
     <% end %>
   </div>
