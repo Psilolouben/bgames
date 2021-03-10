@@ -1,21 +1,46 @@
-<form method="post">
-  <div>
-    <%= label_tag :geeklist_id, 'Geeklist ID' %><br>
-    <%= text_field :geeklist_id, '' %>
+<div class="container", style="margin-top:100px">
+  <div class="row" style="width:100%">
+    <div class="col-md-4" ></div>
+    <div class="col-md-4" >
+      <%= image_tag("gavel.jpeg", height: '320', width: '320') %>
+    </div>
+    <div class="col-md-4" ></div>
   </div>
-  <div>
-    <%= label_tag :gifts, 'Gifts #' %><br>
-    <%= text_field :gifts, '' %>
+  <div class="row" style="width:100%">
+    <div class="col-md-4" ></div>
+    <div class="col-md-4" style="horizontal-alignment:center">
+      <form method="post">
+        <div class="form-group">
+          <%= label_tag :geeklist_id, 'Geeklist ID' %><br>
+          <%= text_field :geeklist_id, '', class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= label_tag :gifts, 'Gifts #' %><br>
+          <%= text_field :gifts, '', class: "form-control" %>
+        </div>
+        <br/>
+        <div>
+          <input type="submit" value="Go!" class="btn btn-primary"/>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-4" ></div>
   </div>
-  <br/>
-  <div>
-    <input type="submit" value="Go!" class="button"/>
+  <div class="row" style="height: 10px"></div>
+  <% if @winners.present? %>
+    <div class="row" style="width:100%; border-style:solid; border-color:red">
+      <div class="col-md-12">
+        <p>
+            <b>Total auction earnings:</b> <%= @money %> euros
+          </p>
+          <p>
+            <b> Random gift winners: </b> <%= @winners&.join(',') %>
+          </p>
+          <p>
+            <b> Highest Bidders: </b> <%= @highest_bidders&.map{|k,v| "#{k}(#{v})"}&.join(',') %>
+          </p>
 
-    <p>
-       <b>Total auction earnings:</b> <%= @money %> euros
-    </p>
-    <p>
-      <b> Random gift winners: </b> <%= @winners&.join(',') %>
-    </p>
-  </div>
-</form>
+      </div>
+    </div>
+  <% end %>
+</div>

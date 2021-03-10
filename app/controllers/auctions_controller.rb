@@ -9,7 +9,7 @@
 
     def calculate
       @money = Bgame.calculate_auction_money(params['geeklist_id'].first)
-      @winners = Bgame.give_presents(params['geeklist_id'].first, params['gifts'].first.to_i)
+      @winners, @highest_bidders = Bgame.give_presents(params['geeklist_id'].first, params['gifts'].first.to_i)
 
       render 'show'
     end

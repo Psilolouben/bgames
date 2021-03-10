@@ -126,7 +126,8 @@ class Bgame < ActiveRecord::Base
       winners << winner
       pot -= [winner]
     end
-    winners.map(&:keys).flatten
+
+    return winners.map(&:keys).flatten, bidders.sort_by{ |_, v| v}.reverse.take(n)
   end
 
   def self.get_bids(geeklist_id)
@@ -138,17 +139,22 @@ class Bgame < ActiveRecord::Base
     hsh.search("geeklist").search("item").each do |itm|
       next if itm.search("comment").blank?
 
+      highest_bidder = itm.search('comment').
+        map{|x| { username: x['username'], bid: x.children.text.to_i } }.max_by{|k| k[:bid]}
+
+      if !bidders[highest_bidder[:username]]
+        bidders[highest_bidder[:username]] = highest_bidder[:bid]
+      else
+        bidders[highest_bidder[:username]] += highest_bidder[:bid]
+      end
+
       itm.search("comment").map do |x|
         amount =  x.children.text.to_i
         next if amount.zero?
 
         pot << { x['username'] => amount }
 
-        #if !bidders[x['username']]
-        #  bidders[x['username']] = amount
-        #else
-        #  bidders[x['username']] += amount
-        #end
+
       end
     end;0
 
