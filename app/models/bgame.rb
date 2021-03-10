@@ -101,6 +101,8 @@ class Bgame < ActiveRecord::Base
 
   def self.calculate_auction_money(geeklist_id)
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
+    sleep(3)
+    response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
     hsh = Hash.from_xml(response)
     items = hsh['geeklist']['item']
 
