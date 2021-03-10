@@ -117,7 +117,7 @@ class Bgame < ActiveRecord::Base
 
   def self.give_presents(geeklist_id, n)
     winners = []
-    response = HTTParty.get('https://www.boardgamegeek.com/xmlapi/geeklist/283290?comments=1').body
+    response = HTTParty.get("https://www.boardgamegeek.com/xmlapi/geeklist/#{geeklist_id}?comments=1").body
     hsh = Hash.from_xml(response)
     items = hsh['geeklist']['item']
 
