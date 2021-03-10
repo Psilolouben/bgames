@@ -1,6 +1,7 @@
 require 'httparty'
 require 'net/http'
 require 'curb'
+require 'nokogiri'
 
 class Bgame < ActiveRecord::Base
   scope :starting_with_a, -> { where('name like \'A%\'') }
@@ -103,13 +104,13 @@ class Bgame < ActiveRecord::Base
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
     sleep(3)
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
-    hsh = Hash.from_xml(response)
-    items = hsh['geeklist']['item']
+    hsh = Nokogiri::XML(response)
 
     money = 0
-    items.each do |itm|
-      next if itm['comment'].nil?
-      money += itm['comment'].is_a?(Array) ? itm['comment'].map{|x| x.strip.to_i}.max : itm['comment'].to_i
+    hsh.search("geeklist").search("item").each do |itm|
+      next if itm.search("comment").blank?
+
+      money += itm.search("comment").map{|x| x.children.text.to_i }.max
     end;0
 
     money
@@ -118,17 +119,18 @@ class Bgame < ActiveRecord::Base
   def self.give_presents(geeklist_id, n)
     winners = []
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi/geeklist/#{geeklist_id}?comments=1").body
-    hsh = Hash.from_xml(response)
-    items = hsh['geeklist']['item']
+    hsh = Nokogiri::XML(response)
 
     pot = []
-    items.each do |itm|
-      next if itm['comment'].nil?
+    hsh.search("geeklist").search("item").each do |itm|
+      next if itm.search("comment").blank?
 
-      itm['comment'].is_a?(Array) ?
-        itm['comment'].to_a.each do |comm|
-          pot << "User that bids #{comm.gsub("\n","")} for item: #{itm['objectname']}" unless comm.strip.to_i.zero?
-        end : "User that bids #{itm['comment'].gsub("\n","")} for item: #{itm['objectname']}"
+      itm.search("comment").map do |x|
+        amount =  x.children.text.to_i
+        next if amount.zero?
+
+        pot << { x['username'] => amount }
+      end
     end;0
 
     n.times do
@@ -137,6 +139,6 @@ class Bgame < ActiveRecord::Base
       pot -= [winner]
     end
 
-    winners
+    winners.map(&:keys).flatten
   end
 end
