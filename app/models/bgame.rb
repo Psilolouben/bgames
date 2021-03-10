@@ -118,10 +118,23 @@ class Bgame < ActiveRecord::Base
 
   def self.give_presents(geeklist_id, n)
     winners = []
+
+    pot, bidders = get_bids(geeklist_id)
+
+    n.times do
+      winner = pot.sample
+      winners << winner
+      pot -= [winner]
+    end
+    winners.map(&:keys).flatten
+  end
+
+  def self.get_bids(geeklist_id)
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi/geeklist/#{geeklist_id}?comments=1").body
     hsh = Nokogiri::XML(response)
 
     pot = []
+    bidders = {}
     hsh.search("geeklist").search("item").each do |itm|
       next if itm.search("comment").blank?
 
@@ -130,15 +143,15 @@ class Bgame < ActiveRecord::Base
         next if amount.zero?
 
         pot << { x['username'] => amount }
+
+        #if !bidders[x['username']]
+        #  bidders[x['username']] = amount
+        #else
+        #  bidders[x['username']] += amount
+        #end
       end
     end;0
 
-    n.times do
-      winner = pot.sample
-      winners << winner
-      pot -= [winner]
-    end
-
-    winners.map(&:keys).flatten
+    return pot, bidders
   end
 end
