@@ -110,7 +110,7 @@ class Bgame < ActiveRecord::Base
     hsh.search("geeklist").search("item").each do |itm|
       next if itm.search("comment").blank?
 
-      money += itm.search("comment").map{|x| x.children.text.to_i }.max
+      money += itm.search("comment").map{|x| x.children.text.gsub(/[^\d]/, '').to_i }.max
     end;0
 
     money
@@ -140,7 +140,7 @@ class Bgame < ActiveRecord::Base
       next if itm.search("comment").blank?
 
       highest_bidder = itm.search('comment').
-        map{|x| { username: x['username'], bid: x.children.text.to_i } }.max_by{|k| k[:bid]}
+        map{|x| { username: x['username'], bid: x.children.text.gsub(/[^\d]/, '').to_i } }.max_by{|k| k[:bid]}
 
       if !bidders[highest_bidder[:username]]
         bidders[highest_bidder[:username]] = highest_bidder[:bid]
@@ -149,7 +149,7 @@ class Bgame < ActiveRecord::Base
       end
 
       itm.search("comment").map do |x|
-        amount =  x.children.text.to_i
+        amount =  x.children.text.gsub(/[^\d]/, '').to_i
         next if amount.zero?
 
         pot << { x['username'] => amount }
