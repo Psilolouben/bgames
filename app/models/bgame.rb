@@ -102,7 +102,11 @@ class Bgame < ActiveRecord::Base
 
   def self.calculate_auction_money(geeklist_id)
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
-    sleep(3)
+    while response.include?('Your request for this geeklist has been accepted and will be processed')
+      response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
+      sleep(1)
+    end
+
     response = HTTParty.get("https://www.boardgamegeek.com/xmlapi2/geeklist/#{geeklist_id}?comments=1").body
     hsh = Nokogiri::XML(response)
 
