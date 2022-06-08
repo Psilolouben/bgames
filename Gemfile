@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.7.1'
+gem 'rails', '4.2.9'
 # Use sqlite3 as the database for Active Record
 gem 'puma', '3.9.1'
 #gem 'turbolinks'
@@ -25,7 +25,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'awesome_print'
 # HTTP Requests (Curl)
-gem "curb", '0.8.6', :require => nil # ubuntu:libcurl4-openssl-dev
+gem "curb", '0.9.7', :require => nil # ubuntu:libcurl4-openssl-dev
 gem "httparty"
 gem 'responders', '~> 2.0'
 gem 'listen', '~> 3.1.5'
@@ -52,7 +52,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'pry-rails', '~> 0.3.6'
   gem 'pry-byebug', '~> 3.5'
-  gem 'pry-doc', '~> 0.11.1'
+  gem 'pry-doc', '~> 1.1  '
   gem 'capistrano', require: false
   gem 'capistrano-rvm', require: false
   gem 'capistrano-rails', require: false
