@@ -44,8 +44,8 @@ Rails.application.configure do
   :address              => "smtp.gmail.com",
   :port                 => 587,
   :domain               => 'gmail.com',
-  :user_name            => Rails.application.secrets['gmail_username'],
-  :password             => Rails.application.secrets['gmail_password'],
+  :user_name            => ENV["BGAMES_MAILER_EMAIL"],
+  :password             => ENV["BGAMES_MAILER_PASSWORD"],
   :authentication       => "plain",
   :enable_starttls_auto => true
   }
