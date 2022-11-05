@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.9'
+gem 'rails', '7.0.4'
 # Use sqlite3 as the database for Active Record
 gem 'puma', '3.9.1'
 #gem 'turbolinks'
@@ -11,7 +11,7 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails'
 gem 'wilson_score'
 gem 'bootstrap'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -27,11 +27,12 @@ gem 'awesome_print'
 # HTTP Requests (Curl)
 gem "curb", '0.9.7', :require => nil # ubuntu:libcurl4-openssl-dev
 gem "httparty"
-gem 'responders', '~> 2.0'
-gem 'listen', '~> 3.1.5'
+gem 'responders'
+gem 'listen'
 gem 'spring'
 gem 'spring-watcher-listen'
 gem 'whenever', require: false
+gem 'rexml'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -62,5 +63,5 @@ group :development do
 end
 
 group :production do
-  gem 'pg', "~> 0.20"
+ # gem 'pg', "~> 0.20"
 end
