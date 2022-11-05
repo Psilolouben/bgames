@@ -43,7 +43,7 @@ class Bgame < ActiveRecord::Base
       response.body.split('<div class="name">').each do |i|
         begin
           game_name = i.split('</a></div><div')[0].split('>')[1].encode("UTF-8").gsub("(Exp)", "")
-            .gsub("(Exp.)", "").gsub(/\(.*\)/, "").gsub("&amp;", "")
+            .gsub("(Exp.)", "").gsub(/\(.*\)/, "").gsub("&amp;", "").gsub("</a", "")
             .gsub("(","").gsub(")","").gsub(": ", ":").strip.squish.encode('utf-8')
 
           next if game_name.blank?
