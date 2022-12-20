@@ -37,9 +37,6 @@
             <b> Random gift winners: </b> <%= @winners&.join(',') %>
           </p>
           <p>
-            <b> Random gifts (lottery mode): </b> <%= @winners&.join(',') %>
-          </p>
-          <p>
             <b> Highest Bidders: </b> <%= @highest_bidders&.map{|k,v| "#{k}(#{v})"}&.join(',') %>
           </p>
 

@@ -114,7 +114,7 @@ class Bgame < ActiveRecord::Base
     hsh.search("geeklist").search("item").each do |itm|
       next if itm.search("comment").blank?
 
-      money += itm.search("comment").map{|x| x.children.text.to_i }.max if itm['username'] == 'psilolouben'
+      money += itm.search("comment").map{|x| x.children.text.to_i }.max
     end;0
 
     money
@@ -122,13 +122,12 @@ class Bgame < ActiveRecord::Base
 
   def self.give_presents(geeklist_id, n)
     winners = []
-    lottery = []
-    pot, bidders, all_tips = get_bids(geeklist_id)
+
+    pot, bidders = get_bids(geeklist_id)
 
     n.times do
       winner = pot.sample
       winners << winner
-      lottery << pot.sample
       pot -= [winner]
     end
 
@@ -141,7 +140,6 @@ class Bgame < ActiveRecord::Base
 
     pot = []
     bidders = {}
-    all_tips = []
     hsh.search("geeklist").search("item").each do |itm|
       next if itm.search("comment").blank?
 
@@ -159,11 +157,11 @@ class Bgame < ActiveRecord::Base
         next if amount.zero?
 
         pot << { x['username'] => amount }
-        all_tips << x['username']
+
 
       end
     end;0
 
-    return pot, bidders, all_tips
+    return pot, bidders
   end
 end
