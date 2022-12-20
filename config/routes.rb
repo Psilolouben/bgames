@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  root 'bgames#index'
+  root 'auction#show'
 
   #match '/',      to: 'bgames#filter',        via: 'post'
   #match '/crawl',      to: 'bgames#crawl',        via: 'get'
