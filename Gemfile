@@ -22,7 +22,7 @@ gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sdoc'
 gem 'awesome_print'
 # HTTP Requests (Curl)
 gem "curb", '0.9.7', :require => nil # ubuntu:libcurl4-openssl-dev
@@ -49,7 +49,7 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'pry-rails', '~> 0.3.6'
   gem 'pry-byebug', '~> 3.5'
