@@ -34,6 +34,7 @@ gem 'spring'
 gem 'spring-watcher-listen'
 gem 'whenever', require: false
 gem 'rexml'
+gem 'sqlite3'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -60,7 +61,6 @@ group :development do
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-puma', require: false
-  gem 'sqlite3'
 end
 
 group :production do
