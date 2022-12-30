@@ -34,7 +34,7 @@ gem 'spring'
 gem 'spring-watcher-listen'
 gem 'whenever', require: false
 gem 'rexml'
-gem 'sqlite3'
+gem 'pg'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
