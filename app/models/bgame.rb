@@ -29,6 +29,7 @@ class Bgame < ActiveRecord::Base
   private
 
   def self.fetch_in_stock
+    @bgames = Bgame.all.to_a
     Bgame.update_all(in_stock: false)
 
     @iteration = 1
@@ -40,9 +41,9 @@ class Bgame < ActiveRecord::Base
       url_parsed = URI.parse(url)
       response = Net::HTTP.get_response(url_parsed)
 
-      response.body.split('<div class="name">').each do |i|
+      Nokogiri::HTML(response.body){ |conf| conf.noblanks }.search('[class=name]').each do |i|
         begin
-          game_name = i.split('</a></div><div')[0].split('>')[1].encode("UTF-8").gsub("(Exp)", "")
+          game_name = i.text.encode("UTF-8").gsub("(Exp)", "")
             .gsub("(Exp.)", "").gsub(/\(.*\)/, "").gsub("&amp;", "").gsub("</a", "")
             .gsub("(","").gsub(")","").gsub(": ", ":").strip.squish.encode('utf-8')
 
