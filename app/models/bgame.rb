@@ -2,6 +2,7 @@ require 'httparty'
 require 'net/http'
 require 'curb'
 require 'nokogiri'
+require 'uri'
 
 class Bgame < ActiveRecord::Base
   scope :starting_with_a, -> { where('name like \'A%\'') }
@@ -44,8 +45,7 @@ class Bgame < ActiveRecord::Base
       Nokogiri::HTML(response.body){ |conf| conf.noblanks }.search('[class=name]').each do |i|
         begin
           game_name = i.text.encode("UTF-8").gsub("(Exp)", "")
-            .gsub("(Exp.)", "").gsub(/\(.*\)/, "").gsub("&amp;", "").gsub("</a", "")
-            .gsub("(","").gsub(")","").gsub(": ", ":").strip.squish.encode('utf-8')
+            .gsub("(Exp.)", "").gsub(/\(.*\)/, "")
 
           next if game_name.blank?
 
@@ -76,7 +76,10 @@ class Bgame < ActiveRecord::Base
     existing = @bgames.select{|n| n.name == name}&.first
     return existing.id if existing
 
-    response = HTTParty.get('https://www.boardgamegeek.com/xmlapi2/search?query=' + CGI.escape(name) + "&type=boardgame").body
+    uri = Addressable::URI.parse("https://www.boardgamegeek.com/xmlapi2/search")
+    uri.query_values = {query: name, type: 'boardgame'}
+
+    response = HTTParty.get(uri.normalize.to_s).body
     sleep(1)
     hsh = Hash.from_xml(response.gsub("\n", ""))
     if hsh["items"]["item"].is_a? Hash
