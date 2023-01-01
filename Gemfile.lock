@@ -177,7 +177,8 @@ GEM
     psych (5.0.1)
       stringio
     public_suffix (5.0.1)
-    puma (3.9.1)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     racc (1.6.1)
     rack (2.2.4)
     rack-test (2.0.2)
@@ -301,7 +302,7 @@ DEPENDENCIES
   pry-byebug (~> 3.5)
   pry-doc (~> 1.1)
   pry-rails (~> 0.3.6)
-  puma (= 3.9.1)
+  puma (= 4.3.12)
   rails (= 7.0.4)
   responders
   rexml
