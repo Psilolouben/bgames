@@ -5,7 +5,7 @@ ruby "3.0.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '7.0.4'
 # Use sqlite3 as the database for Active Record
-gem 'puma', '3.9.1'
+gem 'puma', '4.3.12'
 #gem 'turbolinks'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
